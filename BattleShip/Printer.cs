@@ -4,7 +4,9 @@ namespace BattleShip
 {
     public class Printer
     {
-        public static void PrintMenu( ConsoleColor friendColor, ConsoleColor enemyColor)
+        public static readonly Letters[] letters = (Letters[])Enum.GetValues(typeof(Letters));
+
+        public static void PrintMenu(ConsoleColor friendColor, ConsoleColor enemyColor)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("\t \t________________________________________________________\n");
@@ -110,7 +112,7 @@ namespace BattleShip
         }
 
 
-        public static void PrintBattleship(int[,] arr, ConsoleColor shipColor, ConsoleColor waterColor, Letters[] letters)
+        public static void PrintBattleship(int[,] arr, ConsoleColor shipColor, ConsoleColor waterColor)
         {
             for (int i = 0; i < arr.GetUpperBound(0); i++)
             {

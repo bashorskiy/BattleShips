@@ -180,6 +180,69 @@ namespace BattleShip
                 Console.WriteLine();
             }
         }
+
+        public static void PrintBattleField(int[,] arr, ConsoleColor shipColor, ConsoleColor waterColor)
+        {
+            for (int i = 0; i < arr.GetUpperBound(0); i++)
+            {
+                if (i == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(" N");
+                    Console.ResetColor();
+                }
+                else if (i < 10)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($" {i}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"{i}");
+                    Console.ResetColor();
+                }
+                for (int j = 0; j < arr.GetUpperBound(1); j++)
+                {
+                    if (i == 0 & j > 0 & j < 11)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write($"{letters[j]}|");
+                        Console.ResetColor();
+                    }
+                    else if (arr[i, j] == (int)Map.Wounded) // вывод ранений
+                    {
+                        Console.ForegroundColor = shipColor;
+                        Console.Write("Х");
+                        Console.ResetColor();
+                        Console.Write("|");
+                    }
+                    else if ((arr[i, j] == (int)Map.Empty || arr[i,j] == (int)Map.Ship) & j != 0) // вывод моря
+                    {
+                        Console.ForegroundColor = waterColor;
+                        Console.Write("~");
+                        Console.ResetColor();
+                        Console.Write("|");
+                    }
+
+                    else if (arr[i, j] == (int)Map.Miss) // вывод промахов
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write("*");
+                        Console.ResetColor();
+                        Console.Write("|");
+                    }
+                    else if (j == 0)
+                    {
+                        Console.Write("|");
+                    }
+                    else
+                        Console.Write(" |");
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }
 

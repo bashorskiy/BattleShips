@@ -22,11 +22,11 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 	class Game
 	{
 		
-		static uint fieldsize = 12;
+		static readonly uint fieldsize = 12;
 		static readonly int limit = 20;
-		static bool win,game;
+		static bool game, missing;
 		static int x, y;
-		static int playerFlag; //0 = пусто, 1 = корабль, 2=ранен, 3 = убит, 4 = закрыт обстрел,5 = нельзя ставить, 8 = symbols
+		 //0 = пусто, 1 = корабль, 2=ранен, 3 = убит, 4 = закрыт обстрел,5 = нельзя ставить, 8 = symbols
 		static bool player = true;
 		static Letters buffer_x;
 		
@@ -42,12 +42,10 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 			int[,] secondPlayerField = new int[fieldsize, fieldsize];
 			int secondPlayerCount = 0;
 
-			char control = '1';
+			string control = "1";
 			while (control.Equals("1"))
 			{
 				game = true;
-				
-				win = false;
 				player = true; //player = true - 1-й игрок, player = false - 2-й игрок
 				ResetArray(firstPlayerField);
 				ResetArray(secondPlayerField);
@@ -78,20 +76,29 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 				{
 					while (player)
                     {
-
+						missing = false;
+						while(!missing)
+						{missing = Shoot(secondPlayerField, firstPlayerCount, X_ColorMain, O_ColorMain);}
+						if (firstPlayerCount == limit)
+						{
+							game = false;
+						}
+						player = !player;
+                        
                     }
                     while(!player)
                     {
-
-                    }
-
-				}
-				
-				win = WinCheck(firstPlayerField, x, y, playerFlag);
-				player = !player;
-				
-
-                if (!player)
+						missing = false;
+						while (!missing)
+						{missing = Shoot(firstPlayerField, secondPlayerCount, X_ColorMain, O_ColorMain);}
+						if (secondPlayerCount == limit)
+						{
+							game = false;
+						}
+						player = !player;				
+					}
+				}				
+                if (player)
 				{
 					Console.ForegroundColor = X_ColorMain;
 					Console.WriteLine("Первый игрок победил!");
@@ -105,7 +112,7 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
                 }
 				
 				Console.WriteLine("Сыграете ещё раз или выйдете в меню?\n\r 1. Сыграть ещё раз \n 2. Выйти в меню");
-				control = (char)Console.Read();
+				control = Console.ReadLine();
 			}
 		}
 
@@ -149,7 +156,7 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 				{ 
 					Printer.PrintBattleship(playerField, X_ColorMain, O_ColorMain);
 					Console.WriteLine($"Вы можете поставить: " +
-					$"\t\t\t\t {fourship} четырёхпалубников " +
+					$"\n\t\t\t {fourship} четырёхпалубников " +
 					$"\n\t\t\t {threeship} трёхпалубников" +
 					$"\n\t\t\t {twoship} двухпалубников" +
 					$"\n\t\t\t {oneship} однопалубников \n" +
@@ -241,11 +248,14 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 			return winFlag;
 		}
 
-		public static bool Shoot(int[,] playerTarget,int playerCount, int x, int y)
+		public static bool Shoot(int[,] playerTarget,int playerCount, ConsoleColor shipColor, ConsoleColor waterColor)
         {
 			bool miss = false;
 			while (!miss)
 			{
+				Printer.PrintBattleField(playerTarget, shipColor, waterColor);
+				x = CoordX();
+				y = CoordY();
 				if (playerTarget[x, y] == (int)Map.Ship)
 				{
 					Console.WriteLine("Попадание!");
@@ -254,17 +264,16 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 				}
                 else if (playerTarget[x, y] == (int)Map.Wounded)
                 {
-					Console.WriteLine("Эта клетка уже подбита!");
-					miss = true;
+					Console.WriteLine("Эта клетка уже подбита!");					
 				}
-				else if (playerTarget[x, y] == (int)Map.Oreol || x == 0 || y== 0)
+				else if (playerTarget[x, y] == (int)Map.Miss || x == 0 || y== 0)
                 {
-					Console.WriteLine("Стрелять в эту клетку не имеет смысла - тут не может быть корабля");
-					miss = true;
+					Console.WriteLine("Стрелять в эту клетку не имеет смысла - тут не может быть корабля");					
 				}
 				else
                 {
 					Console.WriteLine("Мимо!");
+					playerTarget[x, y] = (int)Map.Miss;
 					miss = true;
                 }
 			}

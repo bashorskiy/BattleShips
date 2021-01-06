@@ -9,7 +9,8 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 		Wounded = 2,
 		Killed = 3,
 		DontShoot = 4,
-        Oreol = 5
+        Oreol = 5,
+		Miss =6
     }
 
 	/*

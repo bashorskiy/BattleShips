@@ -142,17 +142,31 @@ namespace BattleShip
                         Console.Write($"{letters[j]}|");
                         Console.ResetColor();
                     }
-                    else if (arr[i, j] == 1) // вывод кораблей 
+                    else if (arr[i, j] == (int)Map.Wounded) // вывод ранений
+                    {
+                        Console.ForegroundColor = shipColor;
+                        Console.Write("Х");
+                        Console.ResetColor();
+                        Console.Write("|");
+                    }
+                    else if (arr[i, j] == (int)Map.Ship) // вывод кораблей 
                     {
                         Console.ForegroundColor = shipColor;
                         Console.Write("=");
                         Console.ResetColor();
                         Console.Write("|");
                     }
-                    else if ((arr[i, j] == 0 || arr[i, j] == 5) & j != 0) // вывод моря
+                    else if ((arr[i, j] == (int)Map.Empty) & j != 0) // вывод моря
                     {
                         Console.ForegroundColor = waterColor;
                         Console.Write("~");
+                        Console.ResetColor();
+                        Console.Write("|");
+                    }
+                    else if (arr[i, j] == (int)Map.Oreol)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write("%");
                         Console.ResetColor();
                         Console.Write("|");
                     }

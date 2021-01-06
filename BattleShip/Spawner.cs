@@ -4,12 +4,12 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 {
     enum Map
     {
-		Empty,
-		Ship,
-		Wounded,
-		Killed,
-		DontShoot,
-        Oreol
+		Empty = 0,
+		Ship = 1,
+		Wounded = 2,
+		Killed = 3,
+		DontShoot = 4,
+        Oreol = 5
     }
 
 	/*

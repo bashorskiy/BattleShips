@@ -17,16 +17,17 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 		К	
     }
 
+    
+
 	class Game
 	{
 		
 		static uint fieldsize = 12;
 		static readonly int limit = 20;
-		static bool win;
+		static bool win,game;
 		static int x, y;
 		static int playerFlag; //0 = пусто, 1 = корабль, 2=ранен, 3 = убит, 4 = закрыт обстрел,5 = нельзя ставить, 8 = symbols
 		static bool player = true;
-		static bool tie;
 		static Letters buffer_x;
 		
 
@@ -36,103 +37,59 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 		public static void Play(ConsoleColor X_ColorMain, ConsoleColor O_ColorMain)
 		{ 
 			int[,] firstPlayerField = new int[fieldsize, fieldsize];
-			int[,] secondPlayerField = new int[fieldsize, fieldsize];
-			
+			int firstPlayerCount = 0;
 
-			string control = "1";
+			int[,] secondPlayerField = new int[fieldsize, fieldsize];
+			int secondPlayerCount = 0;
+
+			char control = '1';
 			while (control.Equals("1"))
 			{
-				tie = false;
+				game = true;
+				
 				win = false;
 				player = true; //player = true - 1-й игрок, player = false - 2-й игрок
 				ResetArray(firstPlayerField);
 				ResetArray(secondPlayerField);
 				Console.Clear();
-				while (!win)
+				
+				Console.Write("Начинаем расстановку кораблей для ");
+				Console.ForegroundColor = X_ColorMain;
+				Console.Write("первого ");
+				Console.ResetColor();
+				Console.WriteLine("игрока!");
+				ShipContructer(firstPlayerField, X_ColorMain, O_ColorMain);
+				Console.Clear();
+				Console.WriteLine("Расстановка окончена!");
+
+				Console.WriteLine("Нажмите любую клавишу, для расстановки кораблей второго игрока!");
+				Console.ReadKey();
+											
+				Console.Write("Начинаем расстановку кораблей для ");
+				Console.ForegroundColor = O_ColorMain;
+				Console.Write("второго ");
+				Console.ResetColor();
+				Console.WriteLine("игрока!");
+				ShipContructer(secondPlayerField, X_ColorMain, O_ColorMain);
+				Console.Clear();
+				Console.WriteLine("Расстановка окончена!");
+
+				while (game)
 				{
-					if (player)
-					{
-						byte fourship = 1;
-						byte threeship = 2;
-						byte twoship = 3;
-						byte oneship = 4;
-						while (player) 
-						{
-							bool shipConstruct = true;
-							Printer.PrintBattleship(firstPlayerField, X_ColorMain, O_ColorMain);
-							Console.Write("Начинаем расстановку кораблей для ");
-							Console.ForegroundColor = X_ColorMain;
-							Console.Write("первого ");
-							Console.ResetColor();
-							Console.WriteLine("игрока!");
-							Console.WriteLine($"Вы можете поставить: " +
-								$"\t\t\t {fourship} четырёхпалубников " +
-								$"\n\t\t\t {threeship} трёхпалубников" +
-								$"\n\t\t\t {twoship} двухпалубников" +
-								$"\n\t\t\t {oneship} однопалубников \n"+
-								"Какой корабль хотите поставить?");
-							Console.WriteLine("1.Однопалубный\n" +
-								"2.Двухпалубный\n"+
-								"3.Трёхпалубный\n"+
-								"4.Четырёхпалубный");
+					while (player)
+                    {
 
-							int shipSize = int.Parse(Console.ReadLine());
+                    }
+                    while(!player)
+                    {
 
-							while (shipConstruct)
-							{
-								Console.WriteLine("Пожалуйста, выберите точку, от которой будет отсчитываться выставление корабля");
-								try
-								{
-									x = CoordX(firstPlayerField);
-									y = CoordY(firstPlayerField);
-								}
-								catch (Exception)
-								{
-									Console.WriteLine("Поле не предусмотрено для таких значений");
-									continue;
-								}
+                    }
 
-								if (shipSize > 1 & shipSize < 5)
-								{
-									Console.WriteLine("Пожалуйста, выберите направление, в котором будет выставляться корабль");
-									Console.WriteLine("1.Вверх\n" +
-									"2.Вниз\n" +
-									"3.Впрво\n" +
-									"4.Влево");
-									int direct = int.Parse(Console.ReadLine());
-									Spawner.Spawn(firstPlayerField, x, y, shipSize, direct);
-								}
-								else if (shipSize == 1)
-								{
-									Spawner.Spawn(firstPlayerField, x, y, shipSize, 0);
-								}
-								else
-								{
-									Console.WriteLine("Таких кораблей не существует!");
-								}
-							}
-							
-
-						}
-					}
-					else
-					{
-						Printer.PrintBattleship(secondPlayerField, X_ColorMain, O_ColorMain);
-						Console.Write("Начинаем расстановку кораблей для ");
-						Console.ForegroundColor = O_ColorMain;
-						Console.Write("второго ");
-						Console.ResetColor();
-						Console.WriteLine("игрока!");
-					}
-					while (true)
-					{
-						
-					}
-					Printer.PrintTicFieldNext(firstPlayerField, X_ColorMain, O_ColorMain);
-					
-					win = WinCheck(firstPlayerField, x, y, playerFlag);
-					player = !player;
 				}
+				
+				win = WinCheck(firstPlayerField, x, y, playerFlag);
+				player = !player;
+				
 
                 if (!player)
 				{
@@ -148,11 +105,11 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
                 }
 				
 				Console.WriteLine("Сыграете ещё раз или выйдете в меню?\n\r 1. Сыграть ещё раз \n 2. Выйти в меню");
-				control = Console.ReadLine();
+				control = (char)Console.Read();
 			}
 		}
 
-		public static int CoordX(int[,] userfield)
+		public static int CoordX()
 		{
 			Console.Write($"Введите");
 			Console.ForegroundColor = ConsoleColor.Yellow;
@@ -163,7 +120,7 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 			x = (int)buffer_x;
 			return x;
 		}
-		public static int CoordY(int[,] userfield)
+		public static int CoordY()
 		{
 			Console.Write($"Введите");
 			Console.ForegroundColor = ConsoleColor.Yellow;
@@ -173,6 +130,79 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 			y = int.Parse(Console.ReadLine());
 			return y;
 		}
+
+		public static void ShipContructer(int[,] playerField, ConsoleColor X_ColorMain, ConsoleColor O_ColorMain)
+        {
+			bool shipConstruct = true;
+			byte fourship = 1;
+			byte threeship = 2;
+			byte twoship = 3;
+			byte oneship = 4;
+			int countConstruct = 0; 
+			while (shipConstruct)
+			{
+				if (countConstruct == 10)
+				{
+					shipConstruct = false;
+				}
+				else
+				{ 
+					Printer.PrintBattleship(playerField, X_ColorMain, O_ColorMain);
+					Console.WriteLine($"Вы можете поставить: " +
+					$"\t\t\t\t {fourship} четырёхпалубников " +
+					$"\n\t\t\t {threeship} трёхпалубников" +
+					$"\n\t\t\t {twoship} двухпалубников" +
+					$"\n\t\t\t {oneship} однопалубников \n" +
+					"Какой корабль хотите поставить?");
+					if (oneship != 0)
+					{Console.WriteLine("1.Однопалубный"); }
+					
+					if (twoship != 0)
+					{Console.WriteLine("2.Двухпалубный");}
+
+					if (threeship != 0)
+					{Console.WriteLine("3.Трёхпалубный");}
+
+					if (fourship != 0)
+					{Console.WriteLine("4.Четырёхпалубный");}
+
+					int shipSize = int.Parse(Console.ReadLine());
+					Console.WriteLine("Пожалуйста, введите координаты точки размещения корабля");
+					x = CoordX();
+					y = CoordY();
+					if (shipSize > 1 & shipSize < 5)
+					{
+						switch (shipSize)
+						{
+							case 2: { twoship--; break; }
+							case 3: { threeship--; break; }
+							case 4: { fourship--; break; }
+						}
+
+						Console.WriteLine("Пожалуйста, выберите направление, в котором будет выставляться корабль");
+						Console.WriteLine("1.Вверх\n" +
+						"2.Вниз\n" +
+						"3.Впрво\n" +
+						"4.Влево");
+						int direct = int.Parse(Console.ReadLine());
+						Spawner.Spawn(playerField, x, y, shipSize, direct);
+						countConstruct++;
+					}
+					else if (shipSize == 1)
+					{
+						oneship--;
+						Spawner.Spawn(playerField, x, y, shipSize, 0);
+						countConstruct++;
+					}
+					else
+					{
+						Console.WriteLine("Таких кораблей не существует!");
+					}
+				}
+			}
+			
+		}
+
 
 		public static void ResetArray(int[,] field)
 		{
@@ -211,7 +241,35 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 			return winFlag;
 		}
 
-		
+		public static bool Shoot(int[,] playerTarget,int playerCount, int x, int y)
+        {
+			bool miss = false;
+			while (!miss)
+			{
+				if (playerTarget[x, y] == (int)Map.Ship)
+				{
+					Console.WriteLine("Попадание!");
+					playerTarget[x, y] = (int)Map.Wounded;
+					playerCount++;
+				}
+                else if (playerTarget[x, y] == (int)Map.Wounded)
+                {
+					Console.WriteLine("Эта клетка уже подбита!");
+					miss = true;
+				}
+				else if (playerTarget[x, y] == (int)Map.Oreol || x == 0 || y== 0)
+                {
+					Console.WriteLine("Стрелять в эту клетку не имеет смысла - тут не может быть корабля");
+					miss = true;
+				}
+				else
+                {
+					Console.WriteLine("Мимо!");
+					miss = true;
+                }
+			}
+			return miss;
+        }
 	}
 }
 

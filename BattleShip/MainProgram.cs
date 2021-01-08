@@ -15,15 +15,11 @@ namespace BattleShip
 {
     class MainProgram
     {
-        static readonly uint defaultSize = 12;
-        
-
         static void Main()
         {
-
-
             ConsoleColor firstColor = ConsoleColor.Red;
-            ConsoleColor secondColor = ConsoleColor.DarkCyan;          
+            
+            ConsoleColor waterColor = ConsoleColor.DarkCyan;
             bool game = true;
             bool settings;
             bool menu = true;
@@ -31,13 +27,13 @@ namespace BattleShip
             while (menu)
             {
 
-                Printer.PrintMenu(firstColor, secondColor);
+                Printer.PrintMenu(firstColor, waterColor);
                 bool choiceNum = short.TryParse(Console.ReadLine(), out short choice);
                 if (choice == 1 & choiceNum)
                 {
                     while (game)
                     {
-                        Game.Play(firstColor, secondColor);
+                        Game.Play(firstColor,waterColor);
                         game = false;
                     }
                 }
@@ -46,25 +42,19 @@ namespace BattleShip
                     settings = true;
                     while (settings)
                     {
-                        Settings.Menu(defaultSize, firstColor, secondColor);
-                        string point = Console.ReadLine();
-
+                        Settings.Menu(firstColor,waterColor);
+                        string point = Console.ReadLine();                   
                         if (point == "1")
-                        {
-
-                            break;
-                        }
-                        if (point == "2")
                         {
                             firstColor = Settings.ColorSet(firstColor);
                             break;
-                        }
-                        if (point == "3")
+                        }     
+                        if (point == "2")
                         {
-                            secondColor = Settings.ColorSet(secondColor);
+                            waterColor = Settings.ColorSet(waterColor);
                             break;
                         }
-                        if (point == "4")
+                        if (point == "3")
                         {
                             break;
                         }
@@ -86,8 +76,6 @@ namespace BattleShip
                     Printer.PrintMenuError();
                 }
             }
-               
-
         }
     }
 }

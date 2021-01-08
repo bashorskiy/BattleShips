@@ -6,7 +6,7 @@ namespace BattleShip
     {
         public static readonly Letters[] letters = (Letters[])Enum.GetValues(typeof(Letters));
 
-        public static void PrintMenu(ConsoleColor friendColor, ConsoleColor enemyColor)
+        public static void PrintMenu(ConsoleColor friendColor, ConsoleColor waterColor)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("\t \t________________________________________________________\n");
@@ -19,7 +19,7 @@ namespace BattleShip
             Console.Write("цвет своих кораблей:  " + (Console.ForegroundColor = friendColor));
             Console.ResetColor();
             Console.Write("| \n\t\t |");
-            Console.Write("цвет чужих кораблей: " + (Console.ForegroundColor = enemyColor));
+            Console.Write("цвет воды: " + (Console.ForegroundColor = waterColor));
             Console.ResetColor();
             Console.Write("|\n\n3. Выйти \n");
         }
@@ -91,6 +91,12 @@ namespace BattleShip
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\n\t\t\tНеверный пункт меню!\n");
+            Console.ResetColor();
+        }
+        public static void PrintAmountError()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\n\t\t\tТакие корабли недоступны!\n");
             Console.ResetColor();
         }
         public static void PrintPlaceError()
@@ -218,7 +224,7 @@ namespace BattleShip
                         Console.ResetColor();
                         Console.Write("|");
                     }
-                    else if ((arr[i, j] == (int)Map.Empty || arr[i,j] == (int)Map.Ship) & j != 0) // вывод моря
+                    else if ((arr[i, j] == (int)Map.Empty || arr[i,j] == (int)Map.Ship)|| arr[i, j] == (int)Map.Oreol & j != 0) // вывод моря
                     {
                         Console.ForegroundColor = waterColor;
                         Console.Write("~");
@@ -228,7 +234,7 @@ namespace BattleShip
 
                     else if (arr[i, j] == (int)Map.Miss) // вывод промахов
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.ForegroundColor = ConsoleColor.Blue;
                         Console.Write("*");
                         Console.ResetColor();
                         Console.Write("|");

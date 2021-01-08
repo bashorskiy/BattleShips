@@ -23,7 +23,7 @@ namespace BattleShip
                 {
                     Console.Write($"Сейчас цвет этих кораблей: {Console.ForegroundColor = currentcolor}");
                     Console.ResetColor();
-                    Console.WriteLine($"под номером {m}\n");
+                    Console.WriteLine($" под номером {m}\n");
                 }
                 else
                     Console.WriteLine($"Нажмите [{m}], чтобы выбрать {Console.ForegroundColor = colors[m]}\n");
@@ -34,48 +34,16 @@ namespace BattleShip
               return newcolor;
         }
 
-        //public static uint Size(uint defSize)
-        //{
-        //    bool setSize = true;
-        //    while (setSize)
-        //    {            
-        //        Console.WriteLine("\n1.Изменить размер поля" + $"\t \t\t(сейчас размер поля {defSize-2}х{defSize-2})" );
-        //        Console.WriteLine("2.Выйти в главное меню ");
-        //        string settingsPoint = Console.ReadLine();
-        //        if (settingsPoint == "1")
-        //        {
-        //            Console.WriteLine("\n\nВведите новый размер поля(минимальное значение: 5): \t ");
-        //            bool correctSize = uint.TryParse(Console.ReadLine(), out uint newsize);
-        //            if (correctSize&newsize>=5)
 
-        //            {
-        //                defSize = newsize+2;
-        //                setSize = false;
-        //            }
-        //            else
-        //            {
-        //                Console.ForegroundColor = ConsoleColor.Red;
-        //                Console.WriteLine("Такой размер, к сожалению, недопустим\n");
-        //                Console.ResetColor();
-        //            }
-        //        }
-        //        if (settingsPoint =="2")
-        //        {
-        //            setSize = false;
-        //        }
-        //    }
-        //    return defSize;
-        //}
-
-        public static void Menu(uint defaultSize, ConsoleColor X_currentForeground, ConsoleColor O_currentForeground)
+        public static void Menu(ConsoleColor player1shipColor, ConsoleColor waterColor)
         {
             Console.Write("Что хотите выбрать? \n" 
                                           /*$"1. Размер поля (сейчас {defaultSize - 2}х{defaultSize - 2})\n"*/);
-            Console.Write($"2. Цвет кораблей первого игрока (сейчас {Console.ForegroundColor = X_currentForeground})\n");
+            Console.Write($"1. Цвет кораблей (сейчас {Console.ForegroundColor = player1shipColor})\n");
             Console.ResetColor();
-            Console.Write($"3. Цвет кораблей второго игрока (сейчас {Console.ForegroundColor = O_currentForeground})\n");
+            Console.Write($"2. Цвет воды (сейчас {Console.ForegroundColor = waterColor})\n");
             Console.ResetColor();
-            Console.WriteLine("4. Всё устраивает, хочу вернуться в меню");
+            Console.WriteLine("3. Всё устраивает, хочу вернуться в меню");
         }
     }
 }

@@ -10,7 +10,8 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 		Killed = 3,
 		DontShoot = 4,
         Oreol = 5,
-		Miss =6
+		Miss =6,
+		Symbols = 8
     }
 
 	/*
@@ -21,7 +22,118 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 	 */
 	class Spawner
 	{
-        private class Vert
+		public static void Spawn(int[,] field, int x, int y, int shipSize, int direct, ref byte oneship, ref byte twoship, ref byte threeship, ref byte fourship, ref int countConstruct)
+		{
+			if (shipSize == 1)
+			{
+				if (Vert.FreespaceCheck(field, x, y, shipSize,
+				sign_x: 1, sign_y: -1, sign_vect_x: -1, sign_vect_y: 1))
+				{
+
+					Vert.MakeShip(field, x, y, shipSize,
+					sign_x: 1, sign_y: -1, sign_vect_x: -1, sign_vect_y: 1);
+					oneship--;
+					countConstruct++;
+				}
+				else
+				{
+					Printer.PrintPlaceError();
+				}
+			}
+			else
+			{
+				switch (direct)
+				{
+					case 1:    // вверх
+						{
+							if (Vert.FreespaceCheck(field, x, y, shipSize,
+							sign_x: 1, sign_y: -1, sign_vect_x: -1, sign_vect_y: 1))
+							{
+								Vert.MakeShip(field, x, y, shipSize,
+								sign_x: 1, sign_y: -1, sign_vect_x: -1, sign_vect_y: 1);
+								switch (shipSize)
+								{
+									case 2: { twoship--; break; }
+									case 3: { threeship--; break; }
+									case 4: { fourship--; break; }
+								}
+								countConstruct++;
+							}
+							else
+							{
+								Printer.PrintPlaceError();
+							}
+							break;
+						}
+					case 2: // вниз
+						{
+							if (Vert.FreespaceCheck(field, x, y, shipSize,
+							sign_x: -1, sign_y: -1, sign_vect_x: 1, sign_vect_y: 1))
+							{
+								Vert.MakeShip(field, x, y, shipSize,
+								sign_x: -1, sign_y: -1, sign_vect_x: 1, sign_vect_y: 1);
+								switch (shipSize)
+								{
+									case 2: { twoship--; break; }
+									case 3: { threeship--; break; }
+									case 4: { fourship--; break; }
+								}
+								countConstruct++;
+							}
+							else
+							{
+								Printer.PrintPlaceError();
+							}
+							break;
+						}
+					case 3:    // вправо
+						{
+							if (Horiz.FreespaceCheck(field, x, y, shipSize,
+								sign_x: -1, sign_y: -1, sign_vect_x: 1, sign_vect_y: 1))
+							{
+								Horiz.MakeShip(field, x, y, shipSize,
+								sign_x: -1, sign_y: -1, sign_vect_x: 1, sign_vect_y: 1);
+								switch (shipSize)
+								{
+									case 2: { twoship--; break; }
+									case 3: { threeship--; break; }
+									case 4: { fourship--; break; }
+								}
+								countConstruct++;
+							}
+							else
+							{
+								Printer.PrintPlaceError();
+							}
+							break;
+						}
+					case 4: // влево
+						{
+							if (Horiz.FreespaceCheck(field, x, y, shipSize,
+								sign_x: -1, sign_y: 1, sign_vect_x: 1, sign_vect_y: -1))
+							{
+								Horiz.MakeShip(field, x, y, shipSize,
+								sign_x: -1, sign_y: 1, sign_vect_x: 1, sign_vect_y: -1);
+								switch (shipSize)
+								{
+									case 2: { twoship--; break; }
+									case 3: { threeship--; break; }
+									case 4: { fourship--; break; }
+								}
+								countConstruct++;
+							}
+							else
+							{
+								Printer.PrintPlaceError();
+							}
+							break;
+						}
+				}
+			}
+		}
+
+
+		private class Vert
         {
 			/// <summary>
 			/// Для вертикальных кораблей 
@@ -39,7 +151,8 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 			internal static bool FreespaceCheck(int[,] field, int x, int y, int shipSize, int sign_x, int sign_y, int sign_vect_x, int sign_vect_y)
 			{
 				bool freespace = false;
-				for (int vect_x = 0; vect_x < shipSize + 2; vect_x++)
+
+				for (int vect_x = 0; vect_x < (shipSize + 2); vect_x++)
 				{
 					for (int vect_y = 0; vect_y < 3; vect_y++)
 					{
@@ -47,10 +160,10 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 						{
 							freespace = true;
 						}
-						else
+						else 
 						{
 							freespace = false;
-							vect_x = shipSize + 2;
+							return freespace;
 						}
 					}
 				}
@@ -67,7 +180,7 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 						{
 							field[(x + sign_x) + (sign_vect_x * vect_x), (y + sign_y) + (sign_vect_y * vect_y)] = (int)Map.Ship;
 						}
-						else
+						else if (field[(x + sign_x) + (sign_vect_x * vect_x), (y + sign_y) + (sign_vect_y * vect_y)]!=(int)Map.Symbols)
 						{
 							field[(x + sign_x) + (sign_vect_x * vect_x), (y + sign_y) + (sign_vect_y * vect_y)] = (int)Map.Oreol;
 						}
@@ -97,14 +210,14 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 				{
 					for (int vect_y = 0; vect_y < (shipSize + 2); vect_y++)
 					{
-						if (field[(x + sign_x) + (sign_vect_x * vect_x), (y + sign_y) + (sign_vect_y * vect_y)] != (int)Map.Ship)
+						if (field[(x + sign_x) + (sign_vect_x * vect_x), (y + sign_y) + (sign_vect_y * vect_y)] != (int)Map.Ship)							
 						{
 							freespace = true;
 						}
 						else
 						{
 							freespace = false;
-							vect_y = shipSize + 2;
+							return freespace;
 						}
 					}
 				}
@@ -121,94 +234,13 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 						{
 							field[(x + sign_x) + (sign_vect_x * vect_x), (y + sign_y) + (sign_vect_y * vect_y)] = (int)Map.Ship;
 						}
-						else
+						else if (field[(x + sign_x) + (sign_vect_x * vect_x), (y + sign_y) + (sign_vect_y * vect_y)] != (int)Map.Symbols)
 						{
 							field[(x + sign_x) + (sign_vect_x * vect_x), (y + sign_y) + (sign_vect_y * vect_y)] = (int)Map.Oreol;
 						}
 					}
 				}
 			}
-		}
-		
-
-		public static void Spawn(int[,] field, int x, int y, int shipSize, int direct)
-		{
-			if (shipSize == 1)
-			{
-				if (Vert.FreespaceCheck(field, x, y, shipSize,
-				sign_x: 1, sign_y: -1, sign_vect_x: -1, sign_vect_y: 1))
-				{
-					Vert.MakeShip(field, x, y, shipSize,
-					sign_x: 1, sign_y: -1, sign_vect_x: -1, sign_vect_y: 1);
-				}
-				else
-				{
-					Printer.PrintPlaceError();
-				}
-			}
-			else
-			{
-				switch (direct)
-				{
-					case 1:    // вверх
-						{
-							if (Vert.FreespaceCheck(field, x, y, shipSize,
-							sign_x: 1, sign_y: -1, sign_vect_x: -1, sign_vect_y: 1))
-							{
-								Vert.MakeShip(field, x, y, shipSize,
-								sign_x: 1, sign_y: -1, sign_vect_x: -1, sign_vect_y: 1);
-							}
-							else
-							{
-								Printer.PrintPlaceError();
-							}
-							break;
-						}
-					case 2: // вниз
-						{
-							if (Vert.FreespaceCheck(field, x, y, shipSize,
-							sign_x: -1, sign_y: -1, sign_vect_x: 1, sign_vect_y: 1))
-							{
-								Vert.MakeShip(field, x, y, shipSize,
-								sign_x: -1, sign_y: -1, sign_vect_x: 1, sign_vect_y: 1);
-							}
-							else
-							{
-								Printer.PrintPlaceError();
-							}
-							break;
-						}
-					case 3:    // вправо
-						{
-							if (Horiz.FreespaceCheck(field, x, y, shipSize,
-								sign_x: -1, sign_y: -1, sign_vect_x: 1, sign_vect_y: 1))
-							{
-								Horiz.MakeShip(field, x, y, shipSize,
-								sign_x: -1, sign_y: -1, sign_vect_x: 1, sign_vect_y: 1);
-							}
-							else
-							{
-								Printer.PrintPlaceError();
-							}
-							break;
-						}
-					case 4: // влево
-						{
-							if (Horiz.FreespaceCheck(field, x, y, shipSize,
-								sign_x: -1, sign_y: 1, sign_vect_x: 1, sign_vect_y: -1))
-							{
-								Horiz.MakeShip(field, x, y, shipSize,
-								sign_x: -1, sign_y: 1, sign_vect_x: 1, sign_vect_y: -1);
-							}
-							else
-							{
-								Printer.PrintPlaceError();
-							}
-							break;
-						}
-				}
-			}
-
 		}
 	}
 }

@@ -67,6 +67,12 @@ namespace BattleShip
 
                 else if (choice == 3 & choiceNum)
                 {
+                    Console.WriteLine("[Обучение в процессе написания: если вам не \nсовсем понятно, как играть в этот морской бой - обязательно напишите мне]\n\n Нажмите Enter, чтобы вернуться в меню");
+                    Console.ReadKey();
+                   
+                }
+                else if (choice == 4 & choiceNum)
+                {
                     Console.WriteLine("Спасибо за игру! Пока!");
                     Console.ReadKey();
                     menu = false;

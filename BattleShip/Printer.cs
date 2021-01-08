@@ -21,7 +21,8 @@ namespace BattleShip
             Console.Write("| \n\t\t |");
             Console.Write("цвет воды: " + (Console.ForegroundColor = waterColor));
             Console.ResetColor();
-            Console.Write("|\n\n3. Выйти \n");
+            Console.WriteLine("|\n\n3. Прочитать обучение");
+            Console.Write("4. Выйти \n");
         }
         public static void PrintTicFieldNext(int[,] arr, ConsoleColor X_Color, ConsoleColor O_Color)
         {

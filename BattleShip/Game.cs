@@ -24,10 +24,10 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 		
 		static readonly uint fieldsize = 12;
 		static readonly int limit = 20;
-		static bool missing;
+		
 		static int x, y;
 		 //0 = пусто, 1 = корабль, 2=ранен, 3 = убит, 4 = закрыт обстрел,5 = нельзя ставить, 8 = symbols
-		static bool player = true;
+		
 		
 		public static void Play(ConsoleColor PlayerColor, ConsoleColor waterColor)
 		{ 
@@ -41,7 +41,7 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 			while (control.Equals("1"))
 			{
 				
-				player = true; //player = true - 1-й игрок, player = false - 2-й игрок
+				bool player = true; //player = true - 1-й игрок, player = false - 2-й игрок
 				ResetArray(firstPlayerField);
 				ResetArray(secondPlayerField);
 				Console.Clear();
@@ -71,6 +71,7 @@ namespace BattleShip //0 = пусто, 1 = корабль, 2=ранен, 3 = у�
 				Console.Clear();
 				Console.WriteLine("Расстановка окончена!");
 				bool game = true;
+				bool missing;
 				while (game)
 				{
 					if (player)
